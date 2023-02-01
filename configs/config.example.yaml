@@ -1,0 +1,68 @@
+web:
+  http:
+    server:
+      port: "80"
+chat:
+  http:
+    server:
+      port: "80"
+      maxConn: 200
+  grpc:
+    server:
+      port: "4000"
+  message:
+    maxNum: 500
+    maxSizeByte: 4096
+    worker: 4
+  jwt:
+    secret: mysecret
+match:
+  http:
+    server:
+      port: "80"
+      maxConn: 200
+  grpc:
+    client:
+      chat:
+        endpoint: "localhost:4000"
+      user:
+        endpoint: "localhost:4001"
+  jwt:
+    secret: mysecret
+    expirationSecond: 86400
+  worker: 4
+uploader:
+  http:
+    server:
+      port: "80"
+      maxBodyByte: 67108864
+      maxMemoryByte: 16777216
+  s3:
+    endpoint: http://localhost:9000
+    disableSSL: true
+    region: us-east-1
+    bucket: myfilebucket
+    accessKey: testaccesskey
+    secretKey: testsecret
+  jwt:
+    secret: mysecret
+user:
+  http:
+    server:
+      port: "80"
+  grpc:
+    server:
+      port: "4001"
+redis:
+    password: pass.123
+    addrs: localhost:6379
+    expirationHour: 24
+    minIdleConn: 30
+    poolSize: 500
+    readTimeoutMilliSecond: 500
+    writeTimeoutMilliSecond: 500
+observability:
+  prometheus:
+    port: "8080"
+  tracing:
+    jaegerUrl: "http://localhost:14268/api/traces"

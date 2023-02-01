@@ -1,0 +1,21 @@
+FROM golang:1.18 AS builder
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+ARG VERSION
+RUN make dep
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-X github.com/pawanakhil/rapid-messenger/cmd.Version=`echo $VERSION` -w -s" -o server ./randomchat.go
+
+FROM alpine:3.14
+RUN apk update && apk add --no-cache ca-certificates
+
+RUN mkdir -p /app
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+
+ENTRYPOINT ["/app/server"]
